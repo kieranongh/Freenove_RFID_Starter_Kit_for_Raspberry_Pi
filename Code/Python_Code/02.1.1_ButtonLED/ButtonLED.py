@@ -11,19 +11,25 @@ ledPin = 11    # define ledPin
 buttonPin = 12    # define buttonPin
 
 def setup():
-    
+
     GPIO.setmode(GPIO.BOARD)      # use PHYSICAL GPIO Numbering
     GPIO.setup(ledPin, GPIO.OUT)   # set ledPin to OUTPUT mode
     GPIO.setup(buttonPin, GPIO.IN, pull_up_down=GPIO.PUD_UP)    # set buttonPin to PULL UP INPUT mode
 
 def loop():
+    shine = GPIO.LOW
     while True:
-        if GPIO.input(buttonPin)==GPIO.LOW: # if button is pressed
+        new_shine = GPIO.LOW
+        if GPIO.input(buttonPin) == GPIO.HIGH: # if button is
+            new_shine = GPIO.HIGH
             GPIO.output(ledPin,GPIO.HIGH)   # turn on led
-            print ('led turned on >>>')     # print information on terminal
         else : # if button is relessed
+            new_shine = GPIO.LOW
             GPIO.output(ledPin,GPIO.LOW) # turn off led 
-            print ('led turned off <<<')    
+        if new_shine != shine:
+            print(f'Switch led {new_shine}')
+            shine = new_shine
+            GPIO.output(ledPin,new_shine)   # turn on led
 
 def destroy():
     GPIO.output(ledPin, GPIO.LOW)     # turn off led 
