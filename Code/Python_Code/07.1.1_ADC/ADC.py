@@ -15,6 +15,7 @@ def setup():
     if(adc.detectI2C(0x48)): # Detect the pcf8591.
         adc = PCF8591()
     elif(adc.detectI2C(0x4b)): # Detect the ads7830
+        print(f'AD7830')
         adc = ADS7830()
     else:
         print("No correct I2C address found, \n"
@@ -26,10 +27,11 @@ def loop():
     while True:
         value = adc.analogRead(0)    # read the ADC value of channel 0
         voltage = value / 255.0 * 3.3  # calculate the voltage value
-        print ('ADC Value : %d, Voltage : %.2f'%(value,voltage))
+        print ('ADC Value : %d, Voltage : %.2f'%(value,voltage), end='\r')
         time.sleep(0.1)
 
 def destroy():
+    print()
     adc.close()
     
 if __name__ == '__main__':   # Program entrance
@@ -38,6 +40,8 @@ if __name__ == '__main__':   # Program entrance
         setup()
         loop()
     except KeyboardInterrupt: # Press ctrl-c to end the program.
+        pass
+    finally:
         destroy()
         
     
